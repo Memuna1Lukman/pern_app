@@ -5,7 +5,7 @@ import { ListView } from '@/components/refine-ui/views/list-view'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
-import { DEPARTMENTS_OPTIONS } from '@/constants'
+import { DEPARTMENT_OPTIONS } from '@/constants'
 import { Subject } from '@/types'
 import { SelectValue } from '@radix-ui/react-select'
 import { useTable } from '@refinedev/react-table'
@@ -28,7 +28,7 @@ const SubjectList = () => {
         columns: useMemo<ColumnDef<Subject>[]>(()=>[
             {id: 'code',accessorKey:'code',size:100, header: ()=> <p className='column-title ml-2'>Code</p>,cell:({getValue})=><Badge>{getValue<string>()}</Badge>},
             {id:'name',accessorKey:'name', size:200, header:()=><p className='column-title'>Name</p>,cell:({getValue})=><span className='text-foreground'>{getValue<string>()}</span>,filterFn:'includesString'},
-            {id:'department',accessorKey:'department',size:150,header:()=><p className='column-title'>Department</p>,cell:({getValue})=><Badge variant="secondary">{getValue<string>()}</Badge>},
+            {id:'department',accessorKey:'department.name',size:150,header:()=><p className='column-title'>Department</p>,cell:({getValue})=><Badge variant="secondary">{getValue<string>()}</Badge>},
             {id:"description",accessorKey:'description',size:300,header:()=><p className='column-title'>Description</p>,cell:({getValue})=><span className='truncate line-clamp-2'>{getValue<string>()}</span>}
         ],[]),
         refineCoreProps:{
@@ -76,7 +76,7 @@ const SubjectList = () => {
                             <SelectItem value='all'>
                                 All Departments
                             </SelectItem>
-                            {DEPARTMENTS_OPTIONS.map(department =>(
+                            {DEPARTMENT_OPTIONS.map(department =>(
                                 <SelectItem key={department.value} value={department.value}>{department.label}</SelectItem>
                             ))}
                         </SelectContent>
