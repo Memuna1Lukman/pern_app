@@ -1,9 +1,9 @@
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET, MAX_FILE_SIZE } from '@/constants'
-import { UploadWidgetValue } from '@/types'
-import { UploadCloud, UploadCloudIcon } from 'lucide-react'
-import React, { useEffect, useRef, useState } from 'react'
+import { UploadWidgetProps, UploadWidgetValue } from '@/types'
+import { UploadCloud } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
-const UploadWidget = ({value=null,onChange,disabled = false}) => {
+const UploadWidget = ({ value = null, onChange, disabled = false }: UploadWidgetProps) => {
   const widgetRef = useRef<CloudinaryWidget | null>(null)
   const onChangeRef = useRef(onChange)
   const [preview,setPreview] = useState<UploadWidgetValue | null>(value)
@@ -33,7 +33,7 @@ const UploadWidget = ({value=null,onChange,disabled = false}) => {
       },(error,result)=>{
         if(!error && result.event === "success"){
           const payload: UploadWidgetValue = {
-            url:result.info.secure,
+            url:result.info.secure_url,
             publicId:result.info.public_id
           }
           setPreview(payload)
