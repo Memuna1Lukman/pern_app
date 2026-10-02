@@ -1,7 +1,8 @@
 import { BACKEND_BASE_URL } from '@/constants';
-import { ListResponse } from '@/types';
+import { CreateResponse, ListResponse } from '@/types';
 import { HttpError, parseTableParams } from '@refinedev/core';
 import { createDataProvider, CreateDataProviderOptions } from '@refinedev/rest';
+
 
 if(!BACKEND_BASE_URL)
   throw new Error("Backend Url is not configured");
@@ -54,6 +55,14 @@ const options : CreateDataProviderOptions = {
       return payload.pagination?.total ?? payload.data?.length??0;
     }
 
+  },
+  create:{
+    getEndpoint:({resource})=>resource,
+    buildBodyParams:async({variables})=>variables,
+    mapResponse:async(resource)=>{
+      const json:CreateResponse = await resource.json()
+      return json.data ?? []
+    }
   }
 }
 
