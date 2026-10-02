@@ -15,6 +15,10 @@ A React Framework for building internal tools, admin panels, dashboards & B2B ap
 
 Refine's hooks and components simplifies the development process and eliminates the repetitive tasks by providing industry-standard solutions for crucial aspects of a project, including authentication, access control, routing, networking, state management, and i18n.
 
+## Configuration
+
+Copy `.env.example` to `.env` and replace the placeholder values with your backend URL and Cloudinary unsigned-upload configuration. Keep `.env` private; it is intentionally ignored by Git.
+
 ## Available Scripts
 
 ### Running the development server.

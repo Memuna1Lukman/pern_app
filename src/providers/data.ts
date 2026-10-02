@@ -1,6 +1,6 @@
 import { BACKEND_BASE_URL } from '@/constants';
-import { CreateResponse, ListResponse } from '@/types';
-import { HttpError, parseTableParams } from '@refinedev/core';
+import { CreateResponse, GetOneResponse, ListResponse } from '@/types';
+import { HttpError } from '@refinedev/core';
 import { createDataProvider, CreateDataProviderOptions } from '@refinedev/rest';
 
 
@@ -39,6 +39,9 @@ const options : CreateDataProviderOptions = {
 
 
           
+        } else if (resource === "classes") {
+          if (field === "subjectId" || field === "teacherId") params[field] = value;
+          if (field === "name") params.search = value;
         }
       })
       return params;
@@ -60,8 +63,17 @@ const options : CreateDataProviderOptions = {
     getEndpoint:({resource})=>resource,
     buildBodyParams:async({variables})=>variables,
     mapResponse:async(resource)=>{
+      if(!resource.ok) throw await buildHttpError(resource)
       const json:CreateResponse = await resource.json()
-      return json.data ?? []
+      return (json.data ?? {}) as Record<string, unknown>
+    }
+  },
+  getOne:{
+    getEndpoint:({resource,id})=>`${resource}/${id}`,
+    mapResponse:async(resource)=>{
+      if(!resource.ok) throw await buildHttpError(resource)
+      const json:GetOneResponse = await resource.json()
+      return (json.data ?? {}) as Record<string, unknown>
     }
   }
 }

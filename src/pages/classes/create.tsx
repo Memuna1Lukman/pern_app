@@ -30,7 +30,7 @@ import {
 
 import { classSchema } from '@/lib/schema';
 import UploadWidget from '@/components/UploadWidget';
-import { Subject, User } from '@/types';
+import { Subject, UploadWidgetValue, User } from '@/types';
 
 const Create = () => {
   const back = useBack();
@@ -83,20 +83,15 @@ const Create = () => {
 
   const bannerPublicId = form.watch('bannerCldPubId');
 
-  const setBannerImage = (file: any, field: any) => {
-    if (file) {
-      field.onChange(file.url);
-      form.setValue('bannerCldPubId', file.publicId, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    } else {
-      field.onChange('');
-      form.setValue('bannerCldPubId', '', {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    }
+  const setBannerImage = (file: UploadWidgetValue | null) => {
+    form.setValue('bannerUrl', file?.url ?? '', {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    form.setValue('bannerCldPubId', file?.publicId ?? '', {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   };
 
   return (
@@ -140,7 +135,7 @@ const Create = () => {
                               ? { url: field.value, publicId: bannerPublicId ?? '' }
                               : null
                           }
-                          onChange={(file: any) => setBannerImage(file, field)}
+                          onChange={setBannerImage}
                         />
                       </FormControl>
                       <FormMessage />

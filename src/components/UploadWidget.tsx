@@ -28,10 +28,10 @@ const UploadWidget = ({ value = null, onChange, disabled = false }: UploadWidget
         uploadPreset: CLOUDINARY_UPLOAD_PRESET,
         multiple:false,
         folder: 'uploads',
-        maxFileSize: 5000000,
-        clientsAllowedFormat: ['png','jpg','jpeg','webp']
+        maxFileSize: MAX_FILE_SIZE,
+        clientAllowedFormats: ['png','jpg','jpeg','webp']
       },(error,result)=>{
-        if(!error && result.event === "success"){
+        if(!error && result?.event === "success"){
           const payload: UploadWidgetValue = {
             url:result.info.secure_url,
             publicId:result.info.public_id
@@ -71,20 +71,22 @@ const UploadWidget = ({ value = null, onChange, disabled = false }: UploadWidget
           />
         </div>
 
-      ): <div className= "upload-dropdown" role='button' tabIndex={0} onClick={openWidget} onKeyDown={(event)=>{
-        if(event.key === "Enter"){
-          event.preventDefault()
-          openWidget()
-        }
-      }}>
+      ) : (
+        <button type="button" className="upload-dropzone" onClick={openWidget} disabled={disabled}>
         <div className='upload-prompt'>
-          <UploadCloud className='icon' />
+          <UploadCloud className='icon' aria-hidden="true" />
           <div>
-            <p>Click to Upload Photo</p>
-            <p>PNG,JPG up to 5MB</p>
+            <p>Upload banner image</p>
+            <p>PNG, JPG, or WebP up to 3 MB</p>
           </div>
         </div>
-      </div> }
+        </button>
+      )}
+      {preview && (
+        <button type="button" className="text-sm font-medium text-primary underline" onClick={openWidget} disabled={disabled}>
+          Change banner image
+        </button>
+      )}
     </div>
   )
 }

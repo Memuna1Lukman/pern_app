@@ -33,10 +33,10 @@ const ClassesList = () => {
     const teachers = teachersQuery?.data?.data || [];
 
     const subjectFilters = selectedSubject === 'all' ? [] : [
-        { field: 'subject', operator: 'eq' as const, value: selectedSubject}
+        { field: 'subjectId', operator: 'eq' as const, value: selectedSubject}
     ];
     const teacherFilters = selectedTeacher === 'all' ? [] : [
-        { field: 'teacher', operator: 'eq' as const, value: selectedTeacher}
+        { field: 'teacherId', operator: 'eq' as const, value: selectedTeacher}
     ];
     const searchFilters = searchQuery ? [
         { field: 'name', operator: 'contains' as const, value: searchQuery }
@@ -48,15 +48,18 @@ const ClassesList = () => {
             accessorKey: 'bannerUrl',
             size: 80,
             header: () => <p className="column-title ml-2">Banner</p>,
-            cell: ({ getValue }) => (
-                <div className="flex items-center justify-center ml-2">
-                    <img
-                        src={getValue<string>() || '/placeholder-class.png'}
-                        alt="Class Banner"
-                        className="w-10 h-10 rounded object-cover"
-                    />
-                </div>
-            )
+            cell: ({ getValue }) => {
+                const bannerUrl = getValue<string>();
+                return (
+                    <div className="ml-2 flex items-center justify-center">
+                        {bannerUrl ? (
+                            <img src={bannerUrl} alt="" className="size-10 rounded object-cover" />
+                        ) : (
+                            <div className="size-10 rounded bg-muted" aria-hidden="true" />
+                        )}
+                    </div>
+                );
+            }
         },
         {
             id: 'name',
@@ -159,7 +162,7 @@ const ClassesList = () => {
                                     All Subjects
                                 </SelectItem>
                                 {subjects.map(subject => (
-                                    <SelectItem key={subject.id} value={subject.name}>
+                                    <SelectItem key={subject.id} value={subject.id.toString()}>
                                         {subject.name}
                                     </SelectItem>
                                 ))}
@@ -178,7 +181,7 @@ const ClassesList = () => {
                                     All Teachers
                                 </SelectItem>
                                 {teachers.map(teacher => (
-                                    <SelectItem key={teacher.id} value={teacher.name}>
+                                    <SelectItem key={teacher.id} value={teacher.id.toString()}>
                                         {teacher.name}
                                     </SelectItem>
                                 ))}
